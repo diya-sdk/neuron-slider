@@ -16,6 +16,7 @@
     "tests"
   ],
   "dependencies": {
-    "neuron-base": "partnering/neuron-base"
+    "neuron-base": "partnering/neuron-base",
+    "paper-slider": "Polymer/paper-slider#~0.5.6"
   }
 }

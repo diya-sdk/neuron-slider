@@ -1,0 +1,54 @@
+<link rel="import" href="../paper-slider/paper-slider.html">
+<link rel="import" href="../neuron-base/neuron-base.html">
+
+<polymer-element name="neuron-slider" attributes="label min max value step" extends="neuron-base">
+	<template>
+
+		<style>
+			:host{
+				display: flex;
+
+			}
+
+			:host paper-slider{
+				width: 100%;
+				flex: 1;
+			}
+		</style>
+
+		<template repeat="{{value, i in elems}}">
+			<paper-slider neuron-id="{{i}}" min="{{min}}" max="{{max}}" value="[[initialValue]]" step="{{step}}" on-immediate-value-change="{{onValueChanged}}"></paper-slider>
+		</template>
+
+		<shadow></shadow>
+	</template>
+
+	<script>
+		Polymer({
+
+			min: 0.0,
+			max: 1.0,
+			step: 0.01,
+
+			ready: function(){
+				this.super();
+			},
+
+
+			onValueChanged: function(evt){
+				if(!this.neuron) return ;
+
+				var neuronId = parseInt(evt.target.attributes["neuron-id"].value);
+				var val = evt.target.immediateValue;
+
+				if(isNaN(neuronId) || isNaN(val)) return ;
+
+				this.send(neuronId, val);
+			}
+
+
+
+		});
+
+	</script>
+</polymer-element>
