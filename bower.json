@@ -1,0 +1,21 @@
+{
+  "name": "neuron-slider",
+  "version": "0.8.0",
+  "homepage": "https://github.com/partnering/neuron-slider",
+  "authors": [
+    "Sylvain Mahe <sylv.mahe@gmail.com>"
+  ],
+  "description": "neuron enabled slider",
+  "main": "neuron-slider.html",
+  "license": "LGPL v3",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "neuron-base": "partnering/neuron-base"
+  }
+}
