@@ -15,7 +15,7 @@
 				flex: 1;
 			}
 
-			:host paper-slider[disabled]{
+			:host paper-slider.disconnected{
 				background: rgba(255,255,255, 0.5);
 				color: gray;
 			}
@@ -23,7 +23,7 @@
 		</style>
 
 		<template repeat="{{value, i in elems}}">
-			<paper-slider class="{{state}}" disabled={{state==='disconnected'}} neuron-id="{{i}}" min="{{min}}" max="{{max}}" value="[[initialValue]]" step="{{step}}" on-immediate-value-change="{{onValueChanged}}"></paper-slider>
+			<paper-slider class="{{state}}" disabled="{{state==='disconnected'}}" neuron-id="{{i}}" min="{{min}}" max="{{max}}" value="[[initialValue]]" step="{{step}}" on-immediate-value-change="{{onValueChanged}}"></paper-slider>
 		</template>
 
 		<shadow></shadow>
