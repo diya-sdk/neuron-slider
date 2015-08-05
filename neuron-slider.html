@@ -1,10 +1,12 @@
 <link rel="import" href="../paper-slider/paper-slider.html">
 <link rel="import" href="../neuron-base/neuron-base.html">
 
-<polymer-element name="neuron-slider" attributes="label min max value step" extends="neuron-base">
-	<template>
-
-		<style>
+<!--
+    TODO(polyup): Inheriting from other custom elements is not yet supported.
+    See: https://www.polymer-project.org/1.0/docs/migration.html#inheritance
+ -->
+<dom-module id="neuron-slider">
+  <style>
 			:host{
 				display: flex;
 
@@ -15,46 +17,59 @@
 				flex: 1;
 			}
 
-			:host paper-slider.disconnected{
+			:host paper-slider[disabled]{
 				background: rgba(255,255,255, 0.5);
 				color: gray;
 			}
 
 		</style>
+  <template>
 
-		<template repeat="{{value, i in elems}}">
-			<paper-slider class="{{state}}" disabled="{{state==='disconnected'}}" neuron-id="{{i}}" min="{{min}}" max="{{max}}" value="[[initialValue]]" step="{{step}}" on-immediate-value-change="{{onValueChanged}}"></paper-slider>
+		<template is="dom-repeat" items="{{elems}}" as="value" index-as="i">
+			<paper-slider
+				class="{{state}}"
+				disabled="{{computeDisabled(state)}}"
+				neuron-id="{{i}}"
+				min="{{min}}"
+				max="{{max}}"
+				value="[[initialValue]]"
+				step="{{step}}"
+				on-immediate-value-change="{{onValueChanged}}">
+			</paper-slider>
 		</template>
 
 		<shadow></shadow>
 	</template>
+</dom-module>
+<script>
+	Polymer({
+		is: 'neuron-slider',
+    	behaviors: [DiyaBehaviors.Neuron],
+		properties: {
+			label: { notify: true },
+      		max: { type: Number, value: 1, notify: true },
+      		min: { type: Number, value: 0, notify: true },
+      		onValue: { observer: 'onValueChanged' },
+      		step: { type: Number, value: 0.01, notify: true },
+      		value: { notify: true }
+		},
 
-	<script>
-		Polymer({
+	    ready: function () {
+	    },
 
-			min: 0.0,
-			max: 1.0,
-			step: 0.01,
+	    onValueChanged: function (_, evt) {
+	      	if (!this.neuron) return;
 
-			ready: function(){
-				this.super();
-			},
+			var neuronId = parseInt(evt.target.attributes['neuron-id'].value);
+	     	var val = evt.target.immediateValue;
 
+	  		if (isNaN(neuronId) || isNaN(val)) return;
 
-			onValueChanged: function(evt){
-				if(!this.neuron) return ;
+			this.send(neuronId, val);
+	    },
 
-				var neuronId = parseInt(evt.target.attributes["neuron-id"].value);
-				var val = evt.target.immediateValue;
-
-				if(isNaN(neuronId) || isNaN(val)) return ;
-
-				this.send(neuronId, val);
-			}
-
-
-
-		});
-
-	</script>
-</polymer-element>
+	    computeDisabled: function (state) {
+	      return state === 'disconnected';
+	    }
+	});
+</script>
