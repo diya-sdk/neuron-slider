@@ -1,10 +1,6 @@
 <link rel="import" href="../paper-slider/paper-slider.html">
 <link rel="import" href="../neuron-base/neuron-base.html">
 
-<!--
-    TODO(polyup): Inheriting from other custom elements is not yet supported.
-    See: https://www.polymer-project.org/1.0/docs/migration.html#inheritance
- -->
 <dom-module id="neuron-slider">
   <style>
 			:host{
@@ -25,7 +21,7 @@
 		</style>
   <template>
 
-		<template is="dom-repeat" items="{{elems}}" as="value" index-as="i">
+		<template is="dom-repeat" items="{{neuronValues}}" as="value" index-as="i">
 			<paper-slider
 				class="{{state}}"
 				disabled="{{computeDisabled(state)}}"
@@ -34,7 +30,8 @@
 				max="{{max}}"
 				value="[[initialValue]]"
 				step="{{step}}"
-				on-immediate-value-change="{{onValueChanged}}">
+				on-immediate-value-change="onValueChanged"
+				on-value-change="onValueChanged">
 			</paper-slider>
 		</template>
 
@@ -57,15 +54,16 @@
 	    ready: function () {
 	    },
 
-	    onValueChanged: function (_, evt) {
+	    onValueChanged: function (evt) {
 	      	if (!this.neuron) return;
+		
+		var i = 0; while(evt.path[i].nodeName !== 'PAPER-SLIDER') i++;
+		var slider = evt.path[i];
 
-			var neuronId = parseInt(evt.target.attributes['neuron-id'].value);
-	     	var val = evt.target.immediateValue;
+		var neuronId = evt.model.i;
+		var val = slider.immediateValue;
 
-	  		if (isNaN(neuronId) || isNaN(val)) return;
-
-			this.send(neuronId, val);
+		this.send(neuronId, val);
 	    },
 
 	    computeDisabled: function (state) {
