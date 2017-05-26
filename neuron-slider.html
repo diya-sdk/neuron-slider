@@ -2,7 +2,8 @@
 <link rel="import" href="../neuron-base/neuron-base.html">
 
 <dom-module id="neuron-slider">
-  <style>
+	<template>
+		<style>
 			:host{
 				display: flex;
 
@@ -24,7 +25,7 @@
 			}
 
 		</style>
-  <template>
+
 
 		<template is="dom-repeat" items="{{neuronValues}}" as="value" index-as="i">
 			<paper-slider
@@ -46,33 +47,33 @@
 <script>
 	Polymer({
 		is: 'neuron-slider',
-    	behaviors: [DiyaBehaviors.Neuron],
+		behaviors: [DiyaBehaviors.Neuron],
 		properties: {
 			label: { notify: true },
-      		max: { type: Number, value: 1, notify: true },
-      		min: { type: Number, value: 0, notify: true },
-      		onValue: { observer: 'onValueChanged' },
-      		step: { type: Number, value: 0.01, notify: true },
-      		value: { notify: true }
+			max: { type: Number, value: 1, notify: true },
+			min: { type: Number, value: 0, notify: true },
+			onValue: { observer: 'onValueChanged' },
+			step: { type: Number, value: 0.01, notify: true },
+			value: { notify: true }
 		},
 
-	    ready: function () {
-	    },
+		ready: function () {
+		},
 
-	    onValueChanged: function (evt) {
-	      	if (!this.neuron) return;
-		
-		var i = 0; while(evt.path[i].nodeName !== 'PAPER-SLIDER') i++;
-		var slider = evt.path[i];
+		onValueChanged: function (evt) {
+			if (!this.neuron) return;
 
-		var neuronId = evt.model.i;
-		var val = slider.immediateValue;
+			var i = 0; while(evt.path[i].nodeName !== 'PAPER-SLIDER') i++;
+			var slider = evt.path[i];
 
-		this.send(neuronId, val);
-	    },
+			var neuronId = evt.model.i;
+			var val = slider.immediateValue;
 
-	    computeDisabled: function (state) {
-	      return state === 'disconnected';
-	    }
+			this.send(neuronId, val);
+		},
+
+		computeDisabled: function (state) {
+			return state === 'disconnected';
+		}
 	});
 </script>
